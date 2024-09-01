@@ -1,0 +1,91 @@
+[gd_scene load_steps=14 format=3 uid="uid://doo0554r8xymd"]
+
+[ext_resource type="Script" path="res://scripts/PlayerController.cs" id="1_b2m81"]
+
+[sub_resource type="ProceduralSkyMaterial" id="ProceduralSkyMaterial_akdnq"]
+sky_horizon_color = Color(0.64625, 0.65575, 0.67075, 1)
+ground_horizon_color = Color(0.64625, 0.65575, 0.67075, 1)
+
+[sub_resource type="Sky" id="Sky_r3s2t"]
+sky_material = SubResource("ProceduralSkyMaterial_akdnq")
+
+[sub_resource type="Environment" id="Environment_nn413"]
+background_mode = 2
+sky = SubResource("Sky_r3s2t")
+tonemap_mode = 2
+glow_enabled = true
+
+[sub_resource type="CapsuleMesh" id="CapsuleMesh_n2otr"]
+
+[sub_resource type="CapsuleShape3D" id="CapsuleShape3D_tl5o4"]
+
+[sub_resource type="PlaceholderTexture2D" id="PlaceholderTexture2D_mlxcw"]
+
+[sub_resource type="PhysicsMaterial" id="PhysicsMaterial_by0py"]
+friction = 0.25
+bounce = 0.23
+
+[sub_resource type="BoxShape3D" id="BoxShape3D_y7vg8"]
+size = Vector3(20, 0, 20)
+
+[sub_resource type="PlaneMesh" id="PlaneMesh_24tf5"]
+size = Vector2(20, 20)
+
+[sub_resource type="PhysicsMaterial" id="PhysicsMaterial_kl85b"]
+
+[sub_resource type="BoxShape3D" id="BoxShape3D_ftgum"]
+
+[sub_resource type="BoxMesh" id="BoxMesh_5mu30"]
+
+[node name="Game" type="Node3D"]
+
+[node name="WorldEnvironment" type="WorldEnvironment" parent="."]
+environment = SubResource("Environment_nn413")
+
+[node name="Sun" type="DirectionalLight3D" parent="."]
+transform = Transform3D(-0.866023, -0.433016, 0.250001, 0, 0.499998, 0.866027, -0.500003, 0.749999, -0.43301, 0, 0, 0)
+shadow_enabled = true
+
+[node name="Player" type="CharacterBody3D" parent="."]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 1.76584, 0)
+script = ExtResource("1_b2m81")
+
+[node name="MeshInstance3D" type="MeshInstance3D" parent="Player"]
+mesh = SubResource("CapsuleMesh_n2otr")
+
+[node name="CollisionShape3D" type="CollisionShape3D" parent="Player"]
+shape = SubResource("CapsuleShape3D_tl5o4")
+
+[node name="Face" type="Node3D" parent="Player"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0.563328, 0)
+
+[node name="Camera3D" type="Camera3D" parent="Player/Face"]
+
+[node name="RayCast3D" type="RayCast3D" parent="Player/Face/Camera3D"]
+target_position = Vector3(0, 0, -3)
+
+[node name="Hold" type="Node3D" parent="Player/Face/Camera3D"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0, -3)
+
+[node name="Placeholder" type="Sprite3D" parent="."]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0.00408936, 2.43782, 3.80656)
+texture = SubResource("PlaceholderTexture2D_mlxcw")
+
+[node name="Platform" type="StaticBody3D" parent="."]
+physics_material_override = SubResource("PhysicsMaterial_by0py")
+
+[node name="CollisionShape3D" type="CollisionShape3D" parent="Platform"]
+shape = SubResource("BoxShape3D_y7vg8")
+
+[node name="MeshInstance3D" type="MeshInstance3D" parent="Platform"]
+mesh = SubResource("PlaneMesh_24tf5")
+
+[node name="TestBody" type="RigidBody3D" parent="."]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 3.62459, 1.65929, 0)
+physics_material_override = SubResource("PhysicsMaterial_kl85b")
+
+[node name="CollisionShape3D" type="CollisionShape3D" parent="TestBody"]
+shape = SubResource("BoxShape3D_ftgum")
+
+[node name="MeshInstance3D" type="MeshInstance3D" parent="TestBody"]
+mesh = SubResource("BoxMesh_5mu30")
