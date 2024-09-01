@@ -27,7 +27,7 @@ public partial class PlayerController : CharacterBody3D {
         pickup.TargetPosition = new Vector3(0, 0, -PICKUP_RANGE);
         hold.Position = new Vector3(0, 0, -PICKUP_RANGE);
 
-        pickedObject = GetNode<RigidBody3D>("/root/Game/TestBody");
+        //pickedObject = GetNode<RigidBody3D>("/root/Game/TestBody");
 	}
 
 	public override void _PhysicsProcess(double delta) {
@@ -80,7 +80,10 @@ public partial class PlayerController : CharacterBody3D {
             var key = @event as InputEventKey;
             if (key.IsActionPressed("game_interact")) {
                 var obj = pickup.GetCollider() as RigidBody3D;
-                if (pickedObject == null) pickedObject = obj;
+                if (pickedObject == null) { 
+                    pickedObject = obj; 
+                    hold.Position = new Vector3(0, 0, -camera.Position.DistanceTo(pickedObject.Position));
+                }
                 else pickedObject = null;
             }
         }
@@ -91,6 +94,13 @@ public partial class PlayerController : CharacterBody3D {
         var pos = new System.Numerics.Vector3(Position.X, Position.Y, Position.Z);
         ImGui.InputFloat3("Position", ref pos);
         Position = new Vector3(pos.X, pos.Y, pos.Z);
+        ImGui.End();
+
+        ImGui.Begin("Cube Config");
+        var cube = GetNode<RigidBody3D>("/root/Game/TestBody");
+        var cubepos = new System.Numerics.Vector3(cube.Position.X, cube.Position.Y, cube.Position.Z);
+        ImGui.InputFloat3("Position", ref cubepos);
+        cube.Position = new Vector3(cubepos.X, cubepos.Y, cubepos.Z);
         ImGui.End();
     }
 }
