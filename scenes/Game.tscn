@@ -1,21 +1,37 @@
-[gd_scene load_steps=16 format=3 uid="uid://doo0554r8xymd"]
+[gd_scene load_steps=34 format=3 uid="uid://doo0554r8xymd"]
 
 [ext_resource type="Script" path="res://scripts/PlayerController.cs" id="1_b2m81"]
-[ext_resource type="Shader" path="res://shaders/RetroPixel.gdshader" id="1_istb4"]
+[ext_resource type="Shader" path="res://shaders/VHS.gdshader" id="1_yr46g"]
+[ext_resource type="Texture2D" uid="uid://bwhu3gjcn6s62" path="res://assets/textures/testing/textures/granite_tile_ao_4k.png" id="3_k2teu"]
+[ext_resource type="PackedScene" uid="uid://ii3jy84v0m33" path="res://assets/objects/TestBody.tscn" id="3_m2g17"]
+[ext_resource type="Terrain3DStorage" uid="uid://gyc1jcct1fui" path="res://scenes/GameTerrain.res" id="5_8kcrh"]
+[ext_resource type="Texture2D" uid="uid://butlvd4cjpsde" path="res://assets/textures/testing/textures/granite_tile_nor_gl_4k.png" id="6_q2awf"]
+[ext_resource type="Texture2D" uid="uid://btm1tiruev1kx" path="res://assets/textures/testing/textures/forrest_ground_01_diff_4k.png" id="7_scmrh"]
+[ext_resource type="Texture2D" uid="uid://cotf1jl5d56xc" path="res://assets/textures/testing/textures/forrest_ground_01_nor_gl_4k.png" id="8_mxnqm"]
+[ext_resource type="Texture2D" uid="uid://d2pfuevdjfc3t" path="res://assets/textures/testing/textures/rocky_terrain_02_diff_4k.png" id="10_lldnd"]
+[ext_resource type="Texture2D" uid="uid://2yjpa8c08ssk" path="res://assets/textures/testing/textures/rocky_terrain_02_nor_gl_4k.png" id="11_dob8w"]
+[ext_resource type="Texture2D" uid="uid://ds4kjoht368b2" path="res://assets/textures/testing/textures/asphalt_02_diff_4k.png" id="12_mbnxc"]
+[ext_resource type="Texture2D" uid="uid://bvl2gqvjhx5bo" path="res://assets/textures/testing/textures/asphalt_02_nor_gl_4k.png" id="13_fr8l1"]
+[ext_resource type="Texture2D" uid="uid://cw73uojs0vft0" path="res://assets/textures/testing/textures/gray_rocks_diff_4k.png" id="13_rc80q"]
+[ext_resource type="Texture2D" uid="uid://dwx3bjkpi0vb1" path="res://assets/textures/testing/textures/gray_rocks_nor_gl_4k.png" id="14_d63eo"]
+[ext_resource type="PackedScene" uid="uid://uyc0yn73v48y" path="res://assets/models/testmodel.blend" id="15_mjfjv"]
 
 [sub_resource type="ShaderMaterial" id="ShaderMaterial_rge4r"]
-shader = ExtResource("1_istb4")
-shader_parameter/shake = 0.0
-shader_parameter/noiseQuality = 250.0
-shader_parameter/noiseIntensity = 0.001
-shader_parameter/offsetIntensity = 0.0045
-shader_parameter/colorOffsetIntensity = 0.2
-shader_parameter/pixelSize = 264.611
-shader_parameter/grainIntensity = 0.022
-shader_parameter/use_overlay = false
-shader_parameter/use_lens_distortion = false
-shader_parameter/overlay_color = Color(1, 1, 1, 10)
-shader_parameter/lens_distortion_strength = 0.05
+shader = ExtResource("1_yr46g")
+shader_parameter/resolution = Vector2(320, 180)
+shader_parameter/scan_line_amount = 1.0
+shader_parameter/warp_amount = 0.1
+shader_parameter/noise_amount = 0.03
+shader_parameter/interference_amount = 0.2
+shader_parameter/grille_amount = 0.1
+shader_parameter/grille_size = 1.0
+shader_parameter/vignette_amount = 0.6
+shader_parameter/vignette_intensity = 0.4
+shader_parameter/aberation_amount = 0.5
+shader_parameter/roll_line_amount = 0.3
+shader_parameter/roll_speed = 1.0
+shader_parameter/scan_line_strength = -8.0
+shader_parameter/pixel_strength = -2.0
 
 [sub_resource type="ProceduralSkyMaterial" id="ProceduralSkyMaterial_akdnq"]
 sky_horizon_color = Color(0.64625, 0.65575, 0.67075, 1)
@@ -34,23 +50,86 @@ glow_enabled = true
 
 [sub_resource type="CapsuleShape3D" id="CapsuleShape3D_tl5o4"]
 
-[sub_resource type="PlaceholderTexture2D" id="PlaceholderTexture2D_mlxcw"]
+[sub_resource type="Gradient" id="Gradient_k5suc"]
+offsets = PackedFloat32Array(0.2, 1)
+colors = PackedColorArray(1, 1, 1, 1, 0, 0, 0, 1)
 
-[sub_resource type="PhysicsMaterial" id="PhysicsMaterial_by0py"]
-friction = 0.25
-bounce = 0.23
+[sub_resource type="FastNoiseLite" id="FastNoiseLite_ht2n3"]
+noise_type = 2
+frequency = 0.03
+cellular_jitter = 3.0
+cellular_return_type = 0
+domain_warp_enabled = true
+domain_warp_type = 1
+domain_warp_amplitude = 50.0
+domain_warp_fractal_type = 2
+domain_warp_fractal_lacunarity = 1.5
+domain_warp_fractal_gain = 1.0
 
-[sub_resource type="BoxShape3D" id="BoxShape3D_y7vg8"]
-size = Vector3(20, 0, 20)
+[sub_resource type="NoiseTexture2D" id="NoiseTexture2D_oil7w"]
+seamless = true
+color_ramp = SubResource("Gradient_k5suc")
+noise = SubResource("FastNoiseLite_ht2n3")
 
-[sub_resource type="PlaneMesh" id="PlaneMesh_24tf5"]
-size = Vector2(20, 20)
+[sub_resource type="Terrain3DMaterial" id="Terrain3DMaterial_f3o3e"]
+_shader_parameters = {
+"blend_sharpness": 0.87,
+"height_blending": true,
+"macro_variation1": Color(1, 1, 1, 1),
+"macro_variation2": Color(1, 1, 1, 1),
+"noise1_angle": 0.0,
+"noise1_offset": Vector2(0.5, 0.5),
+"noise1_scale": 0.04,
+"noise2_scale": 0.076,
+"noise3_scale": 0.225,
+"noise_texture": SubResource("NoiseTexture2D_oil7w"),
+"vertex_normals_distance": 128.0
+}
 
-[sub_resource type="PhysicsMaterial" id="PhysicsMaterial_kl85b"]
+[sub_resource type="StandardMaterial3D" id="StandardMaterial3D_7dvi1"]
+cull_mode = 2
+vertex_color_use_as_albedo = true
+backlight_enabled = true
+backlight = Color(0.5, 0.5, 0.5, 1)
 
-[sub_resource type="BoxShape3D" id="BoxShape3D_ftgum"]
+[sub_resource type="Terrain3DMeshAsset" id="Terrain3DMeshAsset_s6tdj"]
+height_offset = 0.5
+density = 10.0
+material_override = SubResource("StandardMaterial3D_7dvi1")
+generated_type = 1
 
-[sub_resource type="BoxMesh" id="BoxMesh_5mu30"]
+[sub_resource type="Terrain3DTextureAsset" id="Terrain3DTextureAsset_y8uce"]
+name = "rocky_terrain_02_diff_4k"
+albedo_texture = ExtResource("10_lldnd")
+normal_texture = ExtResource("11_dob8w")
+
+[sub_resource type="Terrain3DTextureAsset" id="Terrain3DTextureAsset_72c1i"]
+name = "forrest_ground_01_diff_4k"
+id = 1
+albedo_texture = ExtResource("7_scmrh")
+normal_texture = ExtResource("8_mxnqm")
+
+[sub_resource type="Terrain3DTextureAsset" id="Terrain3DTextureAsset_5cs6j"]
+name = "asphalt_02_diff_4k"
+id = 2
+albedo_texture = ExtResource("12_mbnxc")
+normal_texture = ExtResource("13_fr8l1")
+
+[sub_resource type="Terrain3DTextureAsset" id="Terrain3DTextureAsset_gsr05"]
+name = "forrest_ground_01_diff_4k"
+id = 3
+albedo_texture = ExtResource("3_k2teu")
+normal_texture = ExtResource("6_q2awf")
+
+[sub_resource type="Terrain3DTextureAsset" id="Terrain3DTextureAsset_j3jd3"]
+name = "gray_rocks_diff_4k"
+id = 4
+albedo_texture = ExtResource("13_rc80q")
+normal_texture = ExtResource("14_d63eo")
+
+[sub_resource type="Terrain3DAssets" id="Terrain3DAssets_p16ns"]
+mesh_list = Array[Terrain3DMeshAsset]([SubResource("Terrain3DMeshAsset_s6tdj")])
+texture_list = Array[Terrain3DTextureAsset]([SubResource("Terrain3DTextureAsset_y8uce"), SubResource("Terrain3DTextureAsset_72c1i"), SubResource("Terrain3DTextureAsset_5cs6j"), SubResource("Terrain3DTextureAsset_gsr05"), SubResource("Terrain3DTextureAsset_j3jd3")])
 
 [node name="Game" type="Node3D"]
 
@@ -64,6 +143,7 @@ anchor_bottom = 1.0
 grow_horizontal = 2
 grow_vertical = 2
 mouse_filter = 1
+metadata/_edit_use_anchors_ = true
 
 [node name="WorldEnvironment" type="WorldEnvironment" parent="."]
 environment = SubResource("Environment_nn413")
@@ -93,25 +173,13 @@ target_position = Vector3(0, 0, -3)
 [node name="Hold" type="Node3D" parent="Player/Face/Camera3D"]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0, -3)
 
-[node name="Placeholder" type="Sprite3D" parent="."]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0.00408936, 2.43782, 3.80656)
-texture = SubResource("PlaceholderTexture2D_mlxcw")
+[node name="Terrain3D" type="Terrain3D" parent="."]
+storage = ExtResource("5_8kcrh")
+material = SubResource("Terrain3DMaterial_f3o3e")
+assets = SubResource("Terrain3DAssets_p16ns")
 
-[node name="Platform" type="StaticBody3D" parent="."]
-physics_material_override = SubResource("PhysicsMaterial_by0py")
+[node name="testmodel" parent="." instance=ExtResource("15_mjfjv")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 3, 2, 0)
 
-[node name="CollisionShape3D" type="CollisionShape3D" parent="Platform"]
-shape = SubResource("BoxShape3D_y7vg8")
-
-[node name="MeshInstance3D" type="MeshInstance3D" parent="Platform"]
-mesh = SubResource("PlaneMesh_24tf5")
-
-[node name="TestBody" type="RigidBody3D" parent="."]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 3.62459, 1.65929, 0)
-physics_material_override = SubResource("PhysicsMaterial_kl85b")
-
-[node name="CollisionShape3D" type="CollisionShape3D" parent="TestBody"]
-shape = SubResource("BoxShape3D_ftgum")
-
-[node name="MeshInstance3D" type="MeshInstance3D" parent="TestBody"]
-mesh = SubResource("BoxMesh_5mu30")
+[node name="TestBody" parent="." instance=ExtResource("3_m2g17")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 3.00239, 3.5324, 0)

@@ -1,0 +1,24 @@
+[gd_scene load_steps=7 format=3 uid="uid://ii3jy84v0m33"]
+
+[ext_resource type="Script" path="res://scripts/ObjectBehaviours/WorldObject.cs" id="1_u3v35"]
+[ext_resource type="Texture2D" uid="uid://72qksthybbg2" path="res://assets/textures/testing/textures/granite_tile_disp_4k.png" id="2_g8rmw"]
+
+[sub_resource type="PhysicsMaterial" id="PhysicsMaterial_kl85b"]
+
+[sub_resource type="StandardMaterial3D" id="StandardMaterial3D_h10an"]
+albedo_texture = ExtResource("2_g8rmw")
+
+[sub_resource type="BoxMesh" id="BoxMesh_vdv13"]
+
+[sub_resource type="BoxShape3D" id="BoxShape3D_p8v4y"]
+
+[node name="TestBody" type="RigidBody3D"]
+physics_material_override = SubResource("PhysicsMaterial_kl85b")
+script = ExtResource("1_u3v35")
+
+[node name="MeshInstance3D" type="MeshInstance3D" parent="."]
+material_override = SubResource("StandardMaterial3D_h10an")
+mesh = SubResource("BoxMesh_vdv13")
+
+[node name="CollisionShape3D" type="CollisionShape3D" parent="."]
+shape = SubResource("BoxShape3D_p8v4y")

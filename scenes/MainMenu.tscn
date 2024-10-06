@@ -1,6 +1,26 @@
-[gd_scene load_steps=2 format=3 uid="uid://ho4lecy5q34w"]
+[gd_scene load_steps=5 format=3 uid="uid://ho4lecy5q34w"]
+
+[ext_resource type="Script" path="res://scripts/MainMenuController.cs" id="1_c8vm4"]
+[ext_resource type="Shader" path="res://shaders/VHS.gdshader" id="2_xjngp"]
 
 [sub_resource type="PlaceholderTexture2D" id="PlaceholderTexture2D_22eat"]
+
+[sub_resource type="ShaderMaterial" id="ShaderMaterial_mc5j3"]
+shader = ExtResource("2_xjngp")
+shader_parameter/resolution = Vector2(640, 360)
+shader_parameter/scan_line_amount = 1.0
+shader_parameter/warp_amount = 0.1
+shader_parameter/noise_amount = 0.03
+shader_parameter/interference_amount = 0.2
+shader_parameter/grille_amount = 0.1
+shader_parameter/grille_size = 1.0
+shader_parameter/vignette_amount = 0.6
+shader_parameter/vignette_intensity = 0.4
+shader_parameter/aberation_amount = 0.5
+shader_parameter/roll_line_amount = 0.3
+shader_parameter/roll_speed = 1.0
+shader_parameter/scan_line_strength = -8.0
+shader_parameter/pixel_strength = -2.0
 
 [node name="MainMenu" type="Control"]
 layout_mode = 3
@@ -9,6 +29,7 @@ anchor_right = 1.0
 anchor_bottom = 1.0
 grow_horizontal = 2
 grow_vertical = 2
+script = ExtResource("1_c8vm4")
 
 [node name="background" type="TextureRect" parent="."]
 layout_mode = 1
@@ -19,12 +40,63 @@ grow_horizontal = 2
 grow_vertical = 2
 texture = SubResource("PlaceholderTexture2D_22eat")
 
-[node name="Button" type="Button" parent="."]
+[node name="AloneInTheStorm" type="RichTextLabel" parent="."]
 layout_mode = 1
-anchors_preset = 2
-anchor_top = 1.0
+anchors_preset = 5
+anchor_left = 0.5
+anchor_right = 0.5
+offset_left = -623.0
+offset_top = 225.0
+offset_right = 626.0
+offset_bottom = 265.0
+grow_horizontal = 2
+theme_override_font_sizes/normal_font_size = 60
+bbcode_enabled = true
+text = "[center]Alone in The Storm[center]"
+fit_content = true
+
+[node name="buttons" type="VBoxContainer" parent="."]
+layout_mode = 1
+anchors_preset = 8
+anchor_left = 0.5
+anchor_top = 0.5
+anchor_right = 0.5
+anchor_bottom = 0.5
+offset_left = -85.5
+offset_top = -36.0
+offset_right = 85.5
+offset_bottom = 240.0
+grow_horizontal = 2
+grow_vertical = 2
+
+[node name="play" type="Button" parent="buttons"]
+layout_mode = 2
+theme_override_font_sizes/font_size = 42
+text = "Play"
+
+[node name="settings" type="Button" parent="buttons"]
+layout_mode = 2
+theme_override_font_sizes/font_size = 42
+text = "Settings"
+
+[node name="credits" type="Button" parent="buttons"]
+layout_mode = 2
+theme_override_font_sizes/font_size = 42
+text = "Credits"
+
+[node name="quit" type="Button" parent="buttons"]
+layout_mode = 2
+theme_override_font_sizes/font_size = 42
+text = "Quit"
+
+[node name="Shader" type="CanvasLayer" parent="."]
+
+[node name="ColorRect" type="ColorRect" parent="Shader"]
+material = SubResource("ShaderMaterial_mc5j3")
+anchors_preset = 15
+anchor_right = 1.0
 anchor_bottom = 1.0
-offset_top = -52.0
-offset_right = 156.0
-grow_vertical = 0
-text = "BAJO JAJO"
+grow_horizontal = 2
+grow_vertical = 2
+mouse_filter = 2
+metadata/_edit_use_anchors_ = true

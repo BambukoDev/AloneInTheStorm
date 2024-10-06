@@ -7,6 +7,6 @@
     <AllowUnsafeBlocks>true</AllowUnsafeBlocks>
   </PropertyGroup>
   <ItemGroup>
-    <PackageReference Include="ImGui.NET" Version="1.90.9-docking" />
+    <PackageReference Include="ImGui.NET" Version="1.90.9.1" />
   </ItemGroup>
 </Project>
