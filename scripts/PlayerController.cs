@@ -20,7 +20,6 @@ public partial class PlayerController : CharacterBody3D {
     RigidBody3D pickedObject = null;
 
     public override void _Ready() {
-        GD.Print("PlayerController: Ready()");
         face = GetNode<Node3D>("Face");
         camera = face.GetNode<Camera3D>("Camera3D");
         pickup = camera.GetNode<RayCast3D>("RayCast3D");
@@ -132,6 +131,7 @@ public partial class PlayerController : CharacterBody3D {
 
     public override void _Process(double delta) {
         ImGui.Begin("Player Config");
+        if (ImGui.Button("Reset position")) Position = new Vector3(0, 10, 0);
         var pos = new System.Numerics.Vector3(Position.X, Position.Y, Position.Z);
         ImGui.InputFloat3("Position", ref pos);
         Position = new Vector3(pos.X, pos.Y, pos.Z);

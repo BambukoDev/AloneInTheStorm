@@ -1,9 +1,11 @@
-[gd_scene load_steps=34 format=3 uid="uid://doo0554r8xymd"]
+[gd_scene load_steps=37 format=3 uid="uid://doo0554r8xymd"]
 
+[ext_resource type="Shader" path="res://shaders/GammaCorrection.gdshader" id="1_5qbxs"]
 [ext_resource type="Script" path="res://scripts/PlayerController.cs" id="1_b2m81"]
 [ext_resource type="Shader" path="res://shaders/VHS.gdshader" id="1_yr46g"]
 [ext_resource type="Texture2D" uid="uid://bwhu3gjcn6s62" path="res://assets/textures/testing/textures/granite_tile_ao_4k.png" id="3_k2teu"]
 [ext_resource type="PackedScene" uid="uid://ii3jy84v0m33" path="res://assets/objects/TestBody.tscn" id="3_m2g17"]
+[ext_resource type="PackedScene" uid="uid://b5eckixul827n" path="res://assets/objects/Water.tscn" id="3_w013y"]
 [ext_resource type="Terrain3DStorage" uid="uid://gyc1jcct1fui" path="res://scenes/GameTerrain.res" id="5_8kcrh"]
 [ext_resource type="Texture2D" uid="uid://butlvd4cjpsde" path="res://assets/textures/testing/textures/granite_tile_nor_gl_4k.png" id="6_q2awf"]
 [ext_resource type="Texture2D" uid="uid://btm1tiruev1kx" path="res://assets/textures/testing/textures/forrest_ground_01_diff_4k.png" id="7_scmrh"]
@@ -32,6 +34,10 @@ shader_parameter/roll_line_amount = 0.3
 shader_parameter/roll_speed = 1.0
 shader_parameter/scan_line_strength = -8.0
 shader_parameter/pixel_strength = -2.0
+
+[sub_resource type="ShaderMaterial" id="ShaderMaterial_5f6dl"]
+shader = ExtResource("1_5qbxs")
+shader_parameter/gamma = 1.0
 
 [sub_resource type="ProceduralSkyMaterial" id="ProceduralSkyMaterial_akdnq"]
 sky_horizon_color = Color(0.64625, 0.65575, 0.67075, 1)
@@ -133,9 +139,9 @@ texture_list = Array[Terrain3DTextureAsset]([SubResource("Terrain3DTextureAsset_
 
 [node name="Game" type="Node3D"]
 
-[node name="Shader" type="CanvasLayer" parent="."]
+[node name="VHSEffect" type="CanvasLayer" parent="."]
 
-[node name="ColorRect" type="ColorRect" parent="Shader"]
+[node name="ColorRect" type="ColorRect" parent="VHSEffect"]
 material = SubResource("ShaderMaterial_rge4r")
 anchors_preset = 15
 anchor_right = 1.0
@@ -144,6 +150,25 @@ grow_horizontal = 2
 grow_vertical = 2
 mouse_filter = 1
 metadata/_edit_use_anchors_ = true
+
+[node name="GammaCorrection" type="CanvasLayer" parent="."]
+
+[node name="GammaCorrection" type="ColorRect" parent="GammaCorrection"]
+material = SubResource("ShaderMaterial_5f6dl")
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+mouse_filter = 2
+metadata/_edit_use_anchors_ = true
+
+[node name="BigAssLake" parent="." instance=ExtResource("3_w013y")]
+transform = Transform3D(40, 0, 0, 0, 40, 0, 0, 0, 40, -14, -2, -48)
+
+[node name="River" parent="." instance=ExtResource("3_w013y")]
+transform = Transform3D(80, 0, 0, 0, 40, 0, 0, 0, 40, 34.5034, -2, -82.086)
+water_movement = Vector3(10, 0, 0)
 
 [node name="WorldEnvironment" type="WorldEnvironment" parent="."]
 environment = SubResource("Environment_nn413")
